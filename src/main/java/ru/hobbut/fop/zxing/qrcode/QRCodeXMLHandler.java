@@ -55,7 +55,7 @@ public class QRCodeXMLHandler implements XMLHandler {
     private static final Log log = LogFactory.getLog(QRCodeXMLHandler.class);
 
     private static final String DEFAULT_ERROR_CORRECTION_TYPE = "L";
-    private static final String DEFAULT_CHARACTER_SET = "UTF-8";
+    private static final String DEFAULT_CHARACTER_SET = "ISO-8859-1";
 
     private static final String MESSAGE_ATTRIBUTE = "message";
     private static final String ENCODING_ATTRIBUTE = "encoding";
