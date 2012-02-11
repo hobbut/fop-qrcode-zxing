@@ -21,7 +21,7 @@
 
     <groupId>ru.hobbut</groupId>
     <artifactId>fop-zxing</artifactId>
-    <version>0.1-SNAPSHOST</version>
+    <version>0.1</version>
 
     <licenses>
         <license>
