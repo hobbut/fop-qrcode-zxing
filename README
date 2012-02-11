@@ -1,0 +1,19 @@
+# Dependencies
+* Apache FOP [http://xmlgraphics.apache.org/fop/](http://xmlgraphics.apache.org/fop/)
+
+* ZXing ("Zebra Crossing") [http://code.google.com/p/zxing/](http://code.google.com/p/zxing/)
+
+# Usage
+Put [fop-zxing-0.1-jar-with-dependencies.jar](http://code.google.com/p/fop-qrcode-zxing/downloads/detail?name=fop-zxing-0.1-jar-with-dependencies.jar) and in the FOP classpath.
+
+<qr:qr-code xmlns:qr="http://hobbut.ru/fop/qr-code/" width="10cm"  message="Hello, Zxing!" correction="l">
+## Parameters
+*width - Width of qr-code. Can be in mm,pt,in,cm. Default: 50mm
+
+*correction - type of correction. Can be l,m,q,h. Deafult:l
+
+*encoding - Message encoding. Default:UTF-8
+
+*message - Message to encode
+
+[sample.xml](https://github.com/hobbut/fop-qrcode-zxing/blob/master/src/test/resources/sample.xml)
