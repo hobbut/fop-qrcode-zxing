@@ -1,0 +1,17 @@
+.DS_Store
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+#ignore maven build
+target/
+#ignore overlay
+overlays/
+#ignore idea files
+*.iml
+*.ipr
+*.iws
+.idea/
