@@ -125,7 +125,7 @@ public class QRCodeXMLHandler implements XMLHandler {
     }
 
     public boolean supportsRenderer(Renderer renderer) {
-        boolean support = false;
+        boolean support = null != renderer.getGraphics2DAdapter();
         support = support || renderer instanceof PDFRenderer;
         support = support || renderer instanceof PSRenderer;
         return support;
