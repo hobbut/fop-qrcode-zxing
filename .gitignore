@@ -15,3 +15,7 @@ overlays/
 *.ipr
 *.iws
 .idea/
+
+/.settings
+/.project
+/.classpath

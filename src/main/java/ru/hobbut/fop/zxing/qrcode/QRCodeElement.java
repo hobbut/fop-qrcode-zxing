@@ -19,18 +19,15 @@
  */
 package ru.hobbut.fop.zxing.qrcode;
 
+import java.awt.geom.Point2D;
+
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationUtil;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.fo.FONode;
 import org.apache.fop.fo.PropertyList;
-import org.apache.xmlgraphics.util.UnitConv;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
-
-import java.awt.geom.Point2D;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,45 +38,18 @@ import java.util.regex.Pattern;
 
 public class QRCodeElement extends QRCodeObject {
 
-    public static final String DEFAULT_WIDTH = "50mm";
-    public static final Pattern SIZE_PATTERN = Pattern.compile("^(\\d+(?:.\\d+)?)(mm|pt|in|cm)?$");
-
     public QRCodeElement(FONode parent) {
         super(parent);
     }
 
-    public void processNode(String elementName, Locator locator, Attributes attlist, PropertyList propertyList)
-            throws FOPException {
+    public Point2D getDimension(Point2D view) {
+        Configuration configuration = ConfigurationUtil.toConfiguration(getDOMDocument().getDocumentElement());
+        QRCodeDimension dimension = new QRCodeDimension(configuration);
+        return dimension.toPoint2D();
+    }
+
+    public void processNode(String elementName, Locator locator, Attributes attlist, PropertyList propertyList) throws FOPException {
         super.processNode(elementName, locator, attlist, propertyList);
         createBasicDocument();
-    }
-
-    public Point2D getDimension(Point2D view) {
-        Configuration cfg = ConfigurationUtil.toConfiguration(this.doc.getDocumentElement());
-        String length = cfg.getAttribute("width", DEFAULT_WIDTH);
-        double size = getSizeInPt(length);
-        return new Point2D.Double(size, size);
-    }
-
-    public static double getSizeInPt(String length) {
-        Matcher matcher = SIZE_PATTERN.matcher(length);
-        if (!matcher.matches()) throw new RuntimeException("error calculating size");
-        double size = Double.valueOf(matcher.group(1));
-        double sizeInPt = 0;
-        if (matcher.groupCount() > 1) {
-            String measure = matcher.group(2);
-            if ("mm".equals(measure)) {
-                sizeInPt = UnitConv.mm2pt(size);
-            } else if ("pt".equals(measure)) {
-                sizeInPt = size;
-            } else if ("in".equals(measure)) {
-                sizeInPt = UnitConv.in2pt(size);
-            } else if ("cm".equals(measure)) {
-                sizeInPt = UnitConv.mm2pt(10*size);
-            }
-        } else {
-            sizeInPt = size;
-        }
-        return sizeInPt;
     }
 }

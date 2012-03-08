@@ -33,6 +33,7 @@ import java.util.HashMap;
  */
 
 public class QRCodeElementMapping extends ElementMapping {
+    
     public final static String NAMESPACE = "http://hobbut.ru/fop/qr-code/";
 
     public QRCodeElementMapping() {
@@ -44,6 +45,7 @@ public class QRCodeElementMapping extends ElementMapping {
         return getDefaultDOMImplementation();
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     protected void initialize() {
         if (foObjs == null) {
