@@ -18,6 +18,7 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.apache.fop.events.Event;
+import org.apache.fop.events.EventFormatter;
 import org.apache.fop.events.EventListener;
 import org.apache.fop.events.model.EventSeverity;
 import org.junit.Test;
@@ -43,7 +44,7 @@ public class QRCodeTest {
             public void processEvent(Event event) {
                 EventSeverity severity = event.getSeverity();
                 if (severity == EventSeverity.ERROR) {
-                    Assert.fail("an error has occured while rendering");
+                    Assert.fail(EventFormatter.format(event));
                 }
             }
         });
