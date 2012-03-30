@@ -19,18 +19,12 @@
  */
 package ru.hobbut.fop.zxing.qrcode;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.Writer;
-import com.google.zxing.common.BitArray;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationUtil;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fop.render.Renderer;
 import org.apache.fop.render.RendererContext;
 import org.apache.fop.render.XMLHandler;
@@ -40,8 +34,13 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.Writer;
+import com.google.zxing.common.BitArray;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 /**
  * Created with IntelliJ IDEA.
@@ -49,10 +48,8 @@ import java.util.Map;
  * Date: 11.02.12
  * Time: 15:15
  */
-
+@Deprecated
 public class QRCodeXMLHandler implements XMLHandler {
-
-    private static final Log log = LogFactory.getLog(QRCodeXMLHandler.class);
 
     private static final String DEFAULT_ERROR_CORRECTION_TYPE = "L";
     private static final String DEFAULT_CHARACTER_SET = "ISO-8859-1";
