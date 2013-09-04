@@ -25,7 +25,7 @@
 
     <groupId>ru.hobbut</groupId>
     <artifactId>fop-qrcode-zxing</artifactId>
-    <version>0.2</version>
+    <version>0.3-SNAPSHOT</version>
 
     <licenses>
         <license>
@@ -39,7 +39,7 @@
 		<url>https://github.com/lexml/${project.artifactId}</url>
 		<developerConnection>scm:git:https://github.com/lexml/${project.artifactId}.git</developerConnection>
 		<connection>scm:git:https://github.com/lexml/${project.artifactId}.git</connection>
-		<tag>fop-qrcode-zxing-0.2</tag>
+		<tag>HEAD</tag>
 	</scm>
 
     <dependencies>
