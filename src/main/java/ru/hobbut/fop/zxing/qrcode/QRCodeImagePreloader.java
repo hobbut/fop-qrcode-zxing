@@ -1,5 +1,8 @@
 package ru.hobbut.fop.zxing.qrcode;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +20,6 @@ import org.apache.xmlgraphics.image.loader.ImageInfo;
 import org.apache.xmlgraphics.image.loader.impl.AbstractImagePreloader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -49,9 +51,13 @@ public class QRCodeImagePreloader extends AbstractImagePreloader {
         }
     }
 
+    private static final Logger log = LoggerFactory.getLogger(QRCodeImagePreloader.class);
+
     @SuppressWarnings("unchecked")
     public ImageInfo preloadImage(String uri, Source source, ImageContext context) throws ImageException, IOException {
 
+    	log.debug("QRCODE: em preloadImage");
+    	
         try {
 
             DOMSource xml = (DOMSource) source;
@@ -64,7 +70,16 @@ public class QRCodeImagePreloader extends AbstractImagePreloader {
 
             Configuration cfg = ConfigurationUtil.toConfiguration(element);
 
-            String message = cfg.getAttribute(MESSAGE_ATTRIBUTE);
+            //permite que a mensagem seja informada como um elemento, e não apenas como um atributo
+            String message = "";
+            try {
+            	message = cfg.getAttribute(MESSAGE_ATTRIBUTE);
+                System.out.println("QRCODATRIBUTE: "+message);
+            } catch (ConfigurationException configurationException) {
+            	message = cfg.getValue();
+            	log.debug("QRCODEVALUE: "+message);
+            }
+            
             String charSet = cfg.getAttribute(ENCODING_ATTRIBUTE, DEFAULT_CHARACTER_SET);
             ErrorCorrectionLevel correction = getErrorCorrectionLevel(cfg.getAttribute(CORRECTION_ATTRIBUTE, DEFAULT_ERROR_CORRECTION_TYPE));
             QRCodeDimension dimension = new QRCodeDimension(cfg);
@@ -86,7 +101,7 @@ public class QRCodeImagePreloader extends AbstractImagePreloader {
 
         } catch (ConfigurationException configurationException) {
 
-            throw new ImageException("missing attribute message", configurationException);
+            throw new ImageException("Missing attribute. Message= "+configurationException.getMessage(), configurationException);
 
         } catch (WriterException writerException) {
 
