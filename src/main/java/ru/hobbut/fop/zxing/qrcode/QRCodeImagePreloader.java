@@ -36,6 +36,8 @@ public class QRCodeImagePreloader extends AbstractImagePreloader {
     private static final String DEFAULT_ERROR_CORRECTION_TYPE = "L";
     private static final String ENCODING_ATTRIBUTE = "encoding";
     private static final String MESSAGE_ATTRIBUTE = "message";
+    private static final String MARGIN_ATTRIBUTE = "margin";
+    private static final String DEFAULT_MARGIN = "4";
 
     private static ErrorCorrectionLevel getErrorCorrectionLevel(String level) {
         if ("h".equalsIgnoreCase(level)) {
@@ -81,12 +83,14 @@ public class QRCodeImagePreloader extends AbstractImagePreloader {
             }
             
             String charSet = cfg.getAttribute(ENCODING_ATTRIBUTE, DEFAULT_CHARACTER_SET);
+            String margin = cfg.getAttribute(MARGIN_ATTRIBUTE, DEFAULT_MARGIN);
             ErrorCorrectionLevel correction = getErrorCorrectionLevel(cfg.getAttribute(CORRECTION_ATTRIBUTE, DEFAULT_ERROR_CORRECTION_TYPE));
             QRCodeDimension dimension = new QRCodeDimension(cfg);
 
             Map<EncodeHintType, Object> qrHints = new HashMap<EncodeHintType, Object>();
             qrHints.put(EncodeHintType.ERROR_CORRECTION, correction);
             qrHints.put(EncodeHintType.CHARACTER_SET, charSet);
+            qrHints.put(EncodeHintType.MARGIN, Integer.parseInt(margin));
 
             Writer writer = new QRCodeWriter();
             BitMatrix matrix = writer.encode(message, BarcodeFormat.QR_CODE, 0, 0, qrHints);

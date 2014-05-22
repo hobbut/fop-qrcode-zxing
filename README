@@ -12,5 +12,6 @@ width - Width of qr-code. Can be in mm,pt,in,cm. Default: 50mm
 correction - type of correction. Can be l,m,q,h. Deafult:l
 encoding - Message encoding. Default:ISO-8859-1
 message - Message to encode
+margin - Quiet zone margin (in module units). Default: 4
 
 sample.xml : https://github.com/hobbut/fop-qrcode-zxing/blob/master/src/test/resources/sample.xml
