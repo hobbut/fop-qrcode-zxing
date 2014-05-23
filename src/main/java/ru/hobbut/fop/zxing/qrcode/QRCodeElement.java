@@ -19,15 +19,16 @@
  */
 package ru.hobbut.fop.zxing.qrcode;
 
-import java.awt.geom.Point2D;
-
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationUtil;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.fo.FONode;
 import org.apache.fop.fo.PropertyList;
+import org.apache.xmlgraphics.util.UnitConv;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
+
+import java.awt.geom.Point2D;
 
 /**
  * Created with IntelliJ IDEA.
@@ -38,18 +39,18 @@ import org.xml.sax.Locator;
 
 public class QRCodeElement extends QRCodeObject {
 
-    public QRCodeElement(FONode parent) {
-        super(parent);
-    }
+	public QRCodeElement(FONode parent) {
+		super(parent);
+	}
 
-    public Point2D getDimension(Point2D view) {
-        Configuration configuration = ConfigurationUtil.toConfiguration(getDOMDocument().getDocumentElement());
-        QRCodeDimension dimension = new QRCodeDimension(configuration);
-        return dimension.toPoint2D();
-    }
+	public Point2D getDimension(Point2D view) {
+		Configuration configuration = ConfigurationUtil.toConfiguration(getDOMDocument().getDocumentElement());
+		int width = UnitConv.convert(configuration.getAttribute("width", "50mm"));
+		return new Point2D.Double(width / 1000, width / 1000);
+	}
 
-    public void processNode(String elementName, Locator locator, Attributes attlist, PropertyList propertyList) throws FOPException {
-        super.processNode(elementName, locator, attlist, propertyList);
-        createBasicDocument();
-    }
+	public void processNode(String elementName, Locator locator, Attributes attlist, PropertyList propertyList) throws FOPException {
+		super.processNode(elementName, locator, attlist, propertyList);
+		createBasicDocument();
+	}
 }

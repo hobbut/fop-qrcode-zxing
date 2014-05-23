@@ -1,7 +1,6 @@
 package ru.hobbut.fop.zxing.qrcode;
 
-import java.util.Map;
-
+import com.google.zxing.common.BitArray;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.xmlgraphics.image.loader.Image;
 import org.apache.xmlgraphics.image.loader.ImageFlavor;
@@ -12,64 +11,53 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.google.zxing.common.BitArray;
-import com.google.zxing.common.BitMatrix;
+import java.util.Map;
 
 public class QRCodeSVGImageConverter extends AbstractImageConverter {
-    
-    private static final String SVG_ATTR_WIDTH = "width";
-    private static final String SVG_ATTR_HEIGHT = "height";
-    private static final String SVG_ATTR_FILL = "fill";
-    private static final String SVG_ATTR_STROKE = "stroke";
-    private static final String SVG_ATTR_STROKE_WIDTH = "stroke-width";
-    private static final String SVG_ATTR_X = "x";
-    private static final String SVG_ATTR_Y = "y";
-    private static final String SVG_ELEMENT_SVG = "svg";
-    private static final String SVG_ELEMENT_RECT = "rect";
 
-    private static final String COLOR_BLACK = "black";
-    private static final String STROKE_WIDTH = "0.01";
-    private static final String SIZE = "1";
+	private static final String COLOR_BLACK = "black";
 
-    public Image convert(Image source, @SuppressWarnings("rawtypes") Map hints) {
-        QRCodeImage qrCodeImage = (QRCodeImage) source;
-        Document document = bitMatrixToSVGDocument(qrCodeImage.getBitMatrix());
-        return new ImageXMLDOM(source.getInfo(), document, SVGDOMImplementation.SVG_NAMESPACE_URI);
-    }
+	public Image convert(Image source, @SuppressWarnings("rawtypes") Map hints) {
+		QRCodeImage qrCodeImage = (QRCodeImage) source;
 
-    public ImageFlavor getTargetFlavor() {
-        return XMLNamespaceEnabledImageFlavor.SVG_DOM;
-    }
+		final DOMImplementation impl = SVGDOMImplementation.getDOMImplementation();
+		final String svgNS = SVGDOMImplementation.SVG_NAMESPACE_URI;
+		final Document svg = impl.createDocument(svgNS, "svg", null);
+		final Element svgRoot = svg.getDocumentElement();
 
-    public ImageFlavor getSourceFlavor() {
-        return QRCodeImage.QR_CODE_IMAGE_FLAVOR;
-    }
-    
-    private Document bitMatrixToSVGDocument(BitMatrix matrix) {
-        DOMImplementation impl = SVGDOMImplementation.getDOMImplementation();
-        String svgNS = SVGDOMImplementation.SVG_NAMESPACE_URI;
-        Document svg = impl.createDocument(svgNS, SVG_ELEMENT_SVG, null);
-        Element svgRoot = svg.getDocumentElement();
-        int matrixWidth = matrix.getWidth();
-        int matrixHeight = matrix.getHeight();
-        svgRoot.setAttributeNS(null, SVG_ATTR_WIDTH, Integer.toString(matrixWidth));
-        svgRoot.setAttributeNS(null, SVG_ATTR_HEIGHT, Integer.toString(matrixHeight));
-        for (int y = 0; y < matrixHeight; y++) {
-            BitArray bitArray = matrix.getRow(y, null);
-            for (int x = 0; x < bitArray.getSize(); x++) {
-                if (bitArray.get(x)) {
-                    Element rectangle = svg.createElementNS(svgNS, SVG_ELEMENT_RECT);
-                    rectangle.setAttributeNS(null, SVG_ATTR_X, Integer.toString(x));
-                    rectangle.setAttributeNS(null, SVG_ATTR_Y, Integer.toString(y));
-                    rectangle.setAttributeNS(null, SVG_ATTR_WIDTH, SIZE);
-                    rectangle.setAttributeNS(null, SVG_ATTR_HEIGHT, SIZE);
-                    rectangle.setAttributeNS(null, SVG_ATTR_FILL, COLOR_BLACK);
-                    rectangle.setAttributeNS(null, SVG_ATTR_STROKE, COLOR_BLACK);
-                    rectangle.setAttributeNS(null, SVG_ATTR_STROKE_WIDTH, STROKE_WIDTH);
-                    svgRoot.appendChild(rectangle);
-                }
-            }
-        }
-        return svg;
-    }
+		final int matrixWidth = qrCodeImage.getBitMatrix().getWidth();
+		final int matrixHeight = qrCodeImage.getBitMatrix().getHeight();
+
+		svgRoot.setAttributeNS(null, "width", "" + qrCodeImage.getSize().getWidthPx());
+		svgRoot.setAttributeNS(null, "height", "" + qrCodeImage.getSize().getHeightPx());
+		svgRoot.setAttributeNS(null, "viewBox", "0 0 " + matrixWidth + " " + matrixHeight);
+
+		for (int y = 0; y < matrixHeight; y++) {
+			final BitArray bitArray = qrCodeImage.getBitMatrix().getRow(y, null);
+
+			for (int x = 0; x < bitArray.getSize(); x++) {
+				if (bitArray.get(x)) {
+					final Element rectangle = svg.createElementNS(svgNS, "rect");
+					rectangle.setAttributeNS(null, "x", Integer.toString(x));
+					rectangle.setAttributeNS(null, "y", Integer.toString(y));
+					rectangle.setAttributeNS(null, "width", "1");
+					rectangle.setAttributeNS(null, "height", "1");
+					rectangle.setAttributeNS(null, "fill", COLOR_BLACK);
+					//rectangle.setAttributeNS(null, "stroke", COLOR_BLACK);
+					//rectangle.setAttributeNS(null, "stroke-width", "0.01");
+					svgRoot.appendChild(rectangle);
+				}
+			}
+		}
+
+		return new ImageXMLDOM(source.getInfo(), svg, SVGDOMImplementation.SVG_NAMESPACE_URI);
+	}
+
+	public ImageFlavor getTargetFlavor() {
+		return XMLNamespaceEnabledImageFlavor.SVG_DOM;
+	}
+
+	public ImageFlavor getSourceFlavor() {
+		return QRCodeImage.QR_CODE_IMAGE_FLAVOR;
+	}
 }
