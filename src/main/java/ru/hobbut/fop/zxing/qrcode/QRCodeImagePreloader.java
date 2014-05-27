@@ -48,48 +48,49 @@ public class QRCodeImagePreloader extends AbstractImagePreloader {
 	@SuppressWarnings("unchecked")
 	public ImageInfo preloadImage(String uri, Source source, ImageContext context) throws ImageException, IOException {
 		try {
-			DOMSource xml = (DOMSource) source;
-			Document document = (Document) xml.getNode();
-			Element element = document.getDocumentElement();
+			if (source instanceof DOMSource) {
+				DOMSource xml = (DOMSource) source;
+				Document document = (Document) xml.getNode();
+				Element element = document.getDocumentElement();
 
-			if (!QRCodeElementMapping.NAMESPACE.equals(element.getNamespaceURI())) {
-				return null;
+				if (!QRCodeElementMapping.NAMESPACE.equals(element.getNamespaceURI())) {
+					return null;
+				}
+
+				Configuration cfg = ConfigurationUtil.toConfiguration(element);
+
+				String message;
+				try {
+					message = cfg.getAttribute(MESSAGE_ATTRIBUTE);
+				} catch (ConfigurationException configurationException) {
+					message = cfg.getValue();
+				}
+
+				String charSet = cfg.getAttribute(ENCODING_ATTRIBUTE, null);
+				String margin = cfg.getAttribute(MARGIN_ATTRIBUTE, null);
+				ErrorCorrectionLevel correction = getErrorCorrectionLevel(cfg.getAttribute(CORRECTION_ATTRIBUTE, DEFAULT_ERROR_CORRECTION_TYPE));
+				int width = UnitConv.convert(cfg.getAttribute("width", "50mm"));
+
+				Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
+				hints.put(EncodeHintType.ERROR_CORRECTION, correction);
+				if (charSet != null) hints.put(EncodeHintType.CHARACTER_SET, charSet);
+				if (margin != null) hints.put(EncodeHintType.MARGIN, Integer.parseInt(margin));
+
+				Writer writer = new QRCodeWriter();
+				BitMatrix matrix = writer.encode(message, BarcodeFormat.QR_CODE, 0, 0, hints);
+
+				ImageInfo info = new ImageInfo(uri, QRCodeImageLoaderFactory.MIME_TYPE);
+				ImageSize size = new ImageSize();
+				size.setSizeInMillipoints(width, width);
+				size.setResolution(context.getSourceResolution());
+				size.calcPixelsFromSize();
+				info.setSize(size);
+
+				Image image = new QRCodeImage(info, matrix);
+				info.getCustomObjects().put(ImageInfo.ORIGINAL_IMAGE, image);
+
+				return info;
 			}
-
-			Configuration cfg = ConfigurationUtil.toConfiguration(element);
-
-			String message;
-			try {
-				message = cfg.getAttribute(MESSAGE_ATTRIBUTE);
-			} catch (ConfigurationException configurationException) {
-				message = cfg.getValue();
-			}
-
-			String charSet = cfg.getAttribute(ENCODING_ATTRIBUTE, null);
-			String margin = cfg.getAttribute(MARGIN_ATTRIBUTE, null);
-			ErrorCorrectionLevel correction = getErrorCorrectionLevel(cfg.getAttribute(CORRECTION_ATTRIBUTE, DEFAULT_ERROR_CORRECTION_TYPE));
-			int width = UnitConv.convert(cfg.getAttribute("width", "50mm"));
-
-			Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
-			hints.put(EncodeHintType.ERROR_CORRECTION, correction);
-			if (charSet != null) hints.put(EncodeHintType.CHARACTER_SET, charSet);
-			if (margin != null) hints.put(EncodeHintType.MARGIN, Integer.parseInt(margin));
-
-			Writer writer = new QRCodeWriter();
-			BitMatrix matrix = writer.encode(message, BarcodeFormat.QR_CODE, 0, 0, hints);
-
-			ImageInfo info = new ImageInfo(uri, QRCodeImageLoaderFactory.MIME_TYPE);
-			ImageSize size = new ImageSize();
-			size.setSizeInMillipoints(width, width);
-			size.setResolution(context.getSourceResolution());
-			size.calcPixelsFromSize();
-			info.setSize(size);
-
-			Image image = new QRCodeImage(info, matrix);
-			info.getCustomObjects().put(ImageInfo.ORIGINAL_IMAGE, image);
-
-			return info;
-
 		} catch (ConfigurationException configurationException) {
 
 			throw new ImageException("Missing attribute. Message= " + configurationException.getMessage(), configurationException);
@@ -98,5 +99,7 @@ public class QRCodeImagePreloader extends AbstractImagePreloader {
 
 			throw new ImageException("error while encoding image", writerException);
 		}
+
+		return null;
 	}
 }
