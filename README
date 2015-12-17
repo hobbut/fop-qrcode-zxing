@@ -3,7 +3,7 @@ Dependencies
 *ZXing ("Zebra Crossing") http://code.google.com/p/zxing/
 
 Usage
-Putfop-zxing-0.1.2-jar-with-dependencies.jar (http://code.google.com/p/fop-qrcode-zxing/downloads/detail?name=fop-zxing-0.1.2-jar-with-dependencies.jar) and in the FOP classpath.
+Put fop-zxing-0.1.2-jar-with-dependencies.jar (http://code.google.com/p/fop-qrcode-zxing/downloads/detail?name=fop-zxing-0.1.2-jar-with-dependencies.jar) and in the FOP classpath.
 
 <qr:qr-code xmlns:qr="http://hobbut.ru/fop/qr-code/" width="10cm"  message="Hello, Zxing!" correction="l">
 
