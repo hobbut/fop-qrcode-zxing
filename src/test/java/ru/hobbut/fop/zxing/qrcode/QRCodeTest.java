@@ -16,6 +16,7 @@ import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.File;
 
 public class QRCodeTest {
 
@@ -30,7 +31,7 @@ public class QRCodeTest {
 	@Test
 	public void renderingShouldNotRaiseErrors() throws IOException, FOPException, TransformerException {
 
-		FopFactory fopFactory = FopFactory.newInstance();
+		FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
 
 		FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
 		foUserAgent.getEventBroadcaster().addEventListener(new EventListener() {

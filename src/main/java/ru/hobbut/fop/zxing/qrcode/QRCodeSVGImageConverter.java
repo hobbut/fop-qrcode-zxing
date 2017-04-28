@@ -1,7 +1,7 @@
 package ru.hobbut.fop.zxing.qrcode;
 
 import com.google.zxing.common.BitArray;
-import org.apache.batik.dom.svg.SVGDOMImplementation;
+import org.apache.batik.anim.dom.SVGDOMImplementation;
 import org.apache.xmlgraphics.image.loader.Image;
 import org.apache.xmlgraphics.image.loader.ImageFlavor;
 import org.apache.xmlgraphics.image.loader.XMLNamespaceEnabledImageFlavor;
