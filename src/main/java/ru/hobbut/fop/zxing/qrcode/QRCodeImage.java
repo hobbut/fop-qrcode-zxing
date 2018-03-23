@@ -11,9 +11,12 @@ public class QRCodeImage extends AbstractImage {
 
 	private final BitMatrix bitMatrix;
 
-	public QRCodeImage(ImageInfo info, BitMatrix bitMatrix) {
+	private String color;
+
+	public QRCodeImage(ImageInfo info, BitMatrix bitMatrix, String color) {
 		super(info);
 		this.bitMatrix = bitMatrix;
+		this.color = color;
 	}
 
 	public BitMatrix getBitMatrix() {
@@ -26,5 +29,9 @@ public class QRCodeImage extends AbstractImage {
 
 	public boolean isCacheable() {
 		return true;
+	}
+
+	public String getColor() {
+		return color;
 	}
 }

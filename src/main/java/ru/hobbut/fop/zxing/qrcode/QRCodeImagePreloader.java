@@ -28,7 +28,10 @@ public class QRCodeImagePreloader extends AbstractImagePreloader {
 	private static final String ENCODING_ATTRIBUTE = "encoding";
 	private static final String MESSAGE_ATTRIBUTE = "message";
 	private static final String MARGIN_ATTRIBUTE = "margin";
+	private static final String COLOR_ATTRIBUTE = "color";
 
+	private static final String COLOR_BLACK = "black";
+	
 	private static final String DEFAULT_ERROR_CORRECTION_TYPE = "L";
 
 	private static ErrorCorrectionLevel getErrorCorrectionLevel(String level) {
@@ -86,7 +89,7 @@ public class QRCodeImagePreloader extends AbstractImagePreloader {
 				size.calcPixelsFromSize();
 				info.setSize(size);
 
-				Image image = new QRCodeImage(info, matrix);
+				Image image = new QRCodeImage(info, matrix, cfg.getAttribute(COLOR_ATTRIBUTE, COLOR_BLACK));
 				info.getCustomObjects().put(ImageInfo.ORIGINAL_IMAGE, image);
 
 				return info;

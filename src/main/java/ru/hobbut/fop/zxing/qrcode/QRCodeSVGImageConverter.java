@@ -15,8 +15,6 @@ import java.util.Map;
 
 public class QRCodeSVGImageConverter extends AbstractImageConverter {
 
-	private static final String COLOR_BLACK = "black";
-
 	public Image convert(Image source, @SuppressWarnings("rawtypes") Map hints) {
 		QRCodeImage qrCodeImage = (QRCodeImage) source;
 
@@ -42,7 +40,7 @@ public class QRCodeSVGImageConverter extends AbstractImageConverter {
 					rectangle.setAttributeNS(null, "y", Integer.toString(y));
 					rectangle.setAttributeNS(null, "width", "1");
 					rectangle.setAttributeNS(null, "height", "1");
-					rectangle.setAttributeNS(null, "fill", COLOR_BLACK);
+					rectangle.setAttributeNS(null, "fill", qrCodeImage.getColor());
 					//rectangle.setAttributeNS(null, "stroke", COLOR_BLACK);
 					//rectangle.setAttributeNS(null, "stroke-width", "0.01");
 					svgRoot.appendChild(rectangle);
