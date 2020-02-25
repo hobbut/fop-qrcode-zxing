@@ -1,16 +1,18 @@
 Dependencies
-*Apache FOP http://xmlgraphics.apache.org/fop/
+*Apache FOP 2.4 http://xmlgraphics.apache.org/fop/
 *ZXing ("Zebra Crossing") http://code.google.com/p/zxing/
 
 Usage
-Put fop-zxing-0.1.2-jar-with-dependencies.jar (http://code.google.com/p/fop-qrcode-zxing/downloads/detail?name=fop-zxing-0.1.2-jar-with-dependencies.jar) and in the FOP classpath.
+Put the [jar](https://github.com/tommy4st/fop-qrcode-zxing/releases/tag/0.3) in the FOP classpath.
 
-<qr:qr-code xmlns:qr="http://hobbut.ru/fop/qr-code/" width="10cm"  message="Hello, Zxing!" correction="l">
+<qr:qr-code xmlns:qr="http://hobbut.ru/fop/qr-code/" width="10cm" message="Hello, Zxing!" correction="l">
 
 Parameters
 width - Width of qr-code. Can be in mm,pt,in,cm. Default: 50mm
-correction - type of correction. Can be l,m,q,h. Deafult:l
-encoding - Message encoding. Default:ISO-8859-1
-message - Message to encode
+correction - type of correction. Can be l,m,q,h. Deafult: l
+encoding - Message encoding. Default: ISO-8859-1
+message - Message to encode.
+margin - Quiet zone margin (in module units). Default: 4
+color - Color of elements (in SVG notation). Default: black
 
-sample.xml : https://github.com/hobbut/fop-qrcode-zxing/blob/master/src/test/resources/sample.xml
+sample.xml : https://github.com/tommy4st/fop-qrcode-zxing/blob/master/src/test/resources/sample.xml

@@ -30,17 +30,17 @@ import org.apache.fop.fo.XMLObj;
  */
 public class QRCodeObject extends XMLObj {
 
-    public QRCodeObject(FONode parent) {
-        super(parent);
-    }
+	public QRCodeObject(FONode parent) {
+		super(parent);
+	}
 
-    @Override
-    public String getNamespaceURI() {
-        return QRCodeElementMapping.NAMESPACE;
-    }
+	@Override
+	public String getNamespaceURI() {
+		return QRCodeElementMapping.NAMESPACE;
+	}
 
-    @Override
-    public String getNormalNamespacePrefix() {
-        return "qr";
-    }
+	@Override
+	public String getNormalNamespacePrefix() {
+		return "qr";
+	}
 }
