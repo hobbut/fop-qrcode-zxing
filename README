@@ -1,11 +1,11 @@
 Dependencies
-*Apache FOP http://xmlgraphics.apache.org/fop/
+*Apache FOP 2.4 http://xmlgraphics.apache.org/fop/
 *ZXing ("Zebra Crossing") http://code.google.com/p/zxing/
 
 Usage
 Put the [jar](https://github.com/tommy4st/fop-qrcode-zxing/releases/tag/0.3) in the FOP classpath.
 
-<qr:qr-code xmlns:qr="http://hobbut.ru/fop/qr-code/" width="10cm"  message="Hello, Zxing!" correction="l">
+<qr:qr-code xmlns:qr="http://hobbut.ru/fop/qr-code/" width="10cm" message="Hello, Zxing!" correction="l">
 
 Parameters
 width - Width of qr-code. Can be in mm,pt,in,cm. Default: 50mm

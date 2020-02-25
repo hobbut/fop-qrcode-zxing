@@ -7,9 +7,8 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.configuration.ConfigurationUtil;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.xmlgraphics.image.loader.*;
 import org.apache.xmlgraphics.image.loader.impl.AbstractImagePreloader;
 import org.apache.xmlgraphics.util.UnitConv;
@@ -60,24 +59,21 @@ public class QRCodeImagePreloader extends AbstractImagePreloader {
 					return null;
 				}
 
-				Configuration cfg = ConfigurationUtil.toConfiguration(element);
-
 				String message;
-				try {
-					message = cfg.getAttribute(MESSAGE_ATTRIBUTE);
-				} catch (ConfigurationException configurationException) {
-					message = cfg.getValue();
+				message = element.getAttribute(MESSAGE_ATTRIBUTE);
+				if (message.isEmpty()) {
+					message = element.getTextContent();
 				}
 
-				String charSet = cfg.getAttribute(ENCODING_ATTRIBUTE, null);
-				String margin = cfg.getAttribute(MARGIN_ATTRIBUTE, null);
-				ErrorCorrectionLevel correction = getErrorCorrectionLevel(cfg.getAttribute(CORRECTION_ATTRIBUTE, DEFAULT_ERROR_CORRECTION_TYPE));
-				int width = UnitConv.convert(cfg.getAttribute("width", "50mm"));
+				String charSet = element.getAttribute(ENCODING_ATTRIBUTE);
+				String margin = element.getAttribute(MARGIN_ATTRIBUTE);
+				ErrorCorrectionLevel correction = getErrorCorrectionLevel(StringUtils.defaultIfEmpty(element.getAttribute(CORRECTION_ATTRIBUTE), DEFAULT_ERROR_CORRECTION_TYPE));
+				int width = UnitConv.convert(StringUtils.defaultIfEmpty(element.getAttribute("width"), "50mm"));
 
 				Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
 				hints.put(EncodeHintType.ERROR_CORRECTION, correction);
-				if (charSet != null) hints.put(EncodeHintType.CHARACTER_SET, charSet);
-				if (margin != null) hints.put(EncodeHintType.MARGIN, Integer.parseInt(margin));
+				if (!charSet.isEmpty()) hints.put(EncodeHintType.CHARACTER_SET, charSet);
+				if (!margin.isEmpty()) hints.put(EncodeHintType.MARGIN, Integer.parseInt(margin));
 
 				Writer writer = new QRCodeWriter();
 				BitMatrix matrix = writer.encode(message, BarcodeFormat.QR_CODE, 0, 0, hints);
@@ -89,14 +85,14 @@ public class QRCodeImagePreloader extends AbstractImagePreloader {
 				size.calcPixelsFromSize();
 				info.setSize(size);
 
-				Image image = new QRCodeImage(info, matrix, cfg.getAttribute(COLOR_ATTRIBUTE, COLOR_BLACK));
+				Image image = new QRCodeImage(info, matrix, StringUtils.defaultIfEmpty(element.getAttribute(COLOR_ATTRIBUTE), COLOR_BLACK));
 				info.getCustomObjects().put(ImageInfo.ORIGINAL_IMAGE, image);
 
 				return info;
 			}
-		} catch (ConfigurationException configurationException) {
+		} catch (NullPointerException exception) {
 
-			throw new ImageException("Missing attribute. Message= " + configurationException.getMessage(), configurationException);
+			throw new ImageException("Missing attribute. Message= " + exception.getMessage(), exception);
 
 		} catch (WriterException writerException) {
 

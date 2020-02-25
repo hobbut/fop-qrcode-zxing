@@ -1,6 +1,6 @@
 package ru.hobbut.fop.zxing.qrcode;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.apache.fop.apps.*;
 import org.apache.fop.events.Event;
 import org.apache.fop.events.EventFormatter;

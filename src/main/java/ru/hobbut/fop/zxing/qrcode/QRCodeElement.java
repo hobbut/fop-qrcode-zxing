@@ -19,8 +19,6 @@
  */
 package ru.hobbut.fop.zxing.qrcode;
 
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationUtil;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.fo.FONode;
 import org.apache.fop.fo.PropertyList;
@@ -29,6 +27,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 
 import java.awt.geom.Point2D;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created with IntelliJ IDEA.
@@ -44,8 +44,7 @@ public class QRCodeElement extends QRCodeObject {
 	}
 
 	public Point2D getDimension(Point2D view) {
-		Configuration configuration = ConfigurationUtil.toConfiguration(getDOMDocument().getDocumentElement());
-		int width = UnitConv.convert(configuration.getAttribute("width", "50mm"));
+		int width = UnitConv.convert(StringUtils.defaultIfEmpty(getDOMDocument().getDocumentElement().getAttribute("width"), "50mm"));
 		return new Point2D.Double(width / 1000, width / 1000);
 	}
 
